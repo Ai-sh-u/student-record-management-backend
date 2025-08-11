@@ -5,9 +5,10 @@ const Student = require("../models/Student");
 // GET all students
 router.get("/", async (req, res) => {
   try {
-    const students = await Student.find();
+    const students = await Student.find().sort({ createdAt: -1 });
     res.json(students);
   } catch (error) {
+    console.error("Error fetching students:", error);
     res.status(500).json({ message: "Error fetching students", error: error.message });
   }
 });
@@ -23,6 +24,7 @@ router.post("/", async (req, res) => {
     const savedStudent = await student.save();
     res.status(201).json(savedStudent);
   } catch (error) {
+    console.error("Error saving student:", error);
     res.status(500).json({ message: "Error saving student", error: error.message });
   }
 });
@@ -34,6 +36,7 @@ router.delete("/:id", async (req, res) => {
     if (!deleted) return res.status(404).json({ message: "Student not found" });
     res.json({ message: "Student deleted successfully" });
   } catch (error) {
+    console.error("Error deleting student:", error);
     res.status(500).json({ message: "Error deleting student", error: error.message });
   }
 });
